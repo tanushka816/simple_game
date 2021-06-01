@@ -13,17 +13,31 @@ class Player(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
         self.dir = 0
+        self.art_count = 0
 
-    def go_on(self):
-        self.change_x = DX[self.dir] * 2
-        self.change_y = DY[self.dir] * 2
+    def go_on(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                self.change_x = -2
+            if event.key == pygame.K_RIGHT:
+                self.change_x = 2
+            if event.key == pygame.K_DOWN:
+                self.change_y = 2
+            if event.key == pygame.K_UP:
+                self.change_y = -2
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                self.change_x = 0
+            if event.key == pygame.K_RIGHT:
+                self.change_x = 0
+            if event.key == pygame.K_DOWN:
+                self.change_y = 0
+            if event.key == pygame.K_UP:
+                self.change_y = 0
         
     def update(self):
         self.rect.x += self.change_x
         self.rect.y += self.change_y
-
-    # def draw(self):
-    #     pass
 
     
 
@@ -49,14 +63,13 @@ class FullyPlayer(pygame.sprite.Sprite):
     def update(self, t):
         # p.s. https://en.wikipedia.org/wiki/Lissajous_curve
         # t = pygame.time.get_ticks() - self.start_t
-        self.rect.x = math.sin(math.radians(self.liss_a * t + self.sigm)) * self.mult + 200  # self._x
-        self.rect.y = math.sin(math.radians(self.liss_b * t)) * self.mult + 200  # self._y
+        self.rect.x = math.sin(math.radians(self.liss_a * t + self.sigm)) * self.mult + self._x
+        self.rect.y = math.sin(math.radians(self.liss_b * t)) * self.mult + self._y
 
     def check_click(self, event):
         pos_x,pos_y = pygame.mouse.get_pos()
         # check_pos = self.rect.left <= pos_x <= self.rect.right and self.rect.top <= pos_y <= self.rect.bottom
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print(1)
             return self.name
             # if check_pos: self.state = 'active'
             # else: self.state = 'normal'
